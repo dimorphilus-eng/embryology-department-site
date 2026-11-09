@@ -7,6 +7,9 @@ import { hero, site } from "@/content/site";
 import { l, localeParams } from "@/lib/i18n";
 import { resolveLocale, type LocaleParams } from "@/lib/locale";
 import { departmentJsonLd } from "@/lib/schema";
+import { getStore } from "@/lib/store";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return localeParams();
@@ -26,6 +29,12 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
 export default async function LocaleLayout({ children, params }: LocaleParams & { children: React.ReactNode }) {
   const locale = await resolveLocale(params);
   const copy = t(locale);
+  const extraNav = getStore()
+    .pages.filter((page) => page.showInNav)
+    .map((page) => ({
+      href: `/p/${page.slug}`,
+      label: l(locale, page.navLabel.ru ? page.navLabel : page.title),
+    }));
 
   return (
     <>
@@ -33,7 +42,7 @@ export default async function LocaleLayout({ children, params }: LocaleParams & 
       <a className="skip-link" href="#content">
         {copy.skip}
       </a>
-      <SiteHeader locale={locale} />
+      <SiteHeader locale={locale} extraNav={extraNav} />
       <main id="content" className="flex-1">
         {children}
       </main>

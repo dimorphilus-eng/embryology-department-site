@@ -5,10 +5,12 @@ const indexable = process.env.SITE_INDEXABLE !== "false";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      ...(indexable ? { allow: "/" } : { disallow: "/" }),
-    },
+    rules: indexable
+      ? [
+          { userAgent: "*", allow: "/" },
+          { userAgent: "*", disallow: "/admin" },
+        ]
+      : { userAgent: "*", disallow: "/" },
     sitemap: new URL("/sitemap.xml", site.url).toString(),
   };
 }

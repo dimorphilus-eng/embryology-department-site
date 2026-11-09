@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { cache } from "react";
 import type { Localized, Locale } from "@/lib/i18n";
+import { getStore } from "@/lib/store";
 
 export type ArticleKind = "news" | "conference" | "seminar" | "defense";
 
@@ -14,6 +15,7 @@ export type Article = {
   excerpt: Localized;
   place: Localized;
   body: Localized;
+  format: "mdx" | "markdown";
 };
 
 type Frontmatter = {
@@ -34,25 +36,45 @@ function splitBody(content: string): Localized {
   };
 }
 
-export const getArticles = cache((): Article[] => {
+function readFileArticles(): Article[] {
   const dir = path.join(process.cwd(), "content/articles");
   const files = fs.readdirSync(dir).filter((file) => file.endsWith(".mdx"));
-  return files
-    .map((file) => {
-      const raw = fs.readFileSync(path.join(dir, file), "utf8");
-      const parsed = matter(raw);
-      const data = parsed.data as Frontmatter;
-      return {
-        slug: data.slug,
-        date: data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date),
-        kind: data.kind,
-        title: data.title,
-        excerpt: data.excerpt,
-        place: data.place,
-        body: splitBody(parsed.content),
-      };
-    })
-    .sort((a, b) => b.date.localeCompare(a.date));
+  return files.map((file) => {
+    const raw = fs.readFileSync(path.join(dir, file), "utf8");
+    const parsed = matter(raw);
+    const data = parsed.data as Frontmatter;
+    return {
+      slug: data.slug,
+      date: data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date),
+      kind: data.kind,
+      title: data.title,
+      excerpt: data.excerpt,
+      place: data.place,
+      body: splitBody(parsed.content),
+      format: "mdx" as const,
+    };
+  });
+}
+
+export function getFileArticles() {
+  return readFileArticles();
+}
+
+export const getArticles = cache((): Article[] => {
+  const managed: Article[] = getStore().articles.map((article) => ({
+    slug: article.slug,
+    date: article.date,
+    kind: article.kind,
+    title: article.title,
+    excerpt: article.excerpt,
+    place: article.place,
+    body: article.body,
+    format: "markdown",
+  }));
+  const taken = new Set(managed.map((article) => article.slug));
+  return [...managed, ...readFileArticles().filter((article) => !taken.has(article.slug))].sort((a, b) =>
+    b.date.localeCompare(a.date),
+  );
 });
 
 export function getArticle(slug: string) {

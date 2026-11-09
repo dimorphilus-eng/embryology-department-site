@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { MarkdownView } from "@/components/content/markdown";
 import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/layout/container";
 import { JsonLd } from "@/components/layout/json-ld";
@@ -18,7 +19,7 @@ export function generateStaticParams() {
   return localeParams().flatMap(({ locale }) => getArticles().map((article) => ({ locale, slug: article.slug })));
 }
 
-export const dynamicParams = false;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -73,7 +74,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ locale
           <span>{l(locale, article.place)}</span>
         </div>
         <article className="prose-academic mt-8 max-w-3xl text-lg leading-relaxed">
-          <MDXRemote source={l(locale, article.body)} components={mdxComponents} />
+          {article.format === "markdown" ? (
+            <MarkdownView source={l(locale, article.body)} />
+          ) : (
+            <MDXRemote source={l(locale, article.body)} components={mdxComponents} />
+          )}
         </article>
         <Link href={href(locale, "/news")} className="mt-10 inline-flex min-h-11 items-center text-sm font-semibold text-pine underline underline-offset-4">
           {copy.backToNews}

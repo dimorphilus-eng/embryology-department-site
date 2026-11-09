@@ -4,6 +4,7 @@ import { people } from "@/content/people";
 import { publications } from "@/content/research";
 import { t } from "@/content/messages";
 import { href, l, normalizeSearch, type Locale } from "@/lib/i18n";
+import { getStore } from "@/lib/store";
 
 export type SearchKind = "person" | "publication" | "course" | "news" | "page";
 
@@ -70,6 +71,12 @@ export function searchSite(locale: Locale, query: string): SearchHit[] {
       title: copy.pages[page.title],
       text: l(locale, page.text),
       href: href(locale, page.path),
+    })),
+    ...getStore().pages.map((page) => ({
+      kind: "page" as const,
+      title: l(locale, page.title),
+      text: `${l(locale, page.lead)} ${l(locale, page.body).slice(0, 500)}`,
+      href: href(locale, `/p/${page.slug}`),
     })),
   ];
 

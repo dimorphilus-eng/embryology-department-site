@@ -3,6 +3,9 @@ import { getArticles } from "@/lib/articles";
 import { people } from "@/content/people";
 import { site } from "@/content/site";
 import { href, locales } from "@/lib/i18n";
+import { getStore } from "@/lib/store";
+
+export const dynamic = "force-dynamic";
 
 const paths = [
   "/",
@@ -29,7 +32,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   const articles = getArticles().map((article) => `/news/${article.slug}`);
   const profiles = people.map((person) => `/people/${person.slug}`);
-  const all = [...paths, ...articles, ...profiles];
+  const custom = getStore().pages.map((page) => `/p/${page.slug}`);
+  const all = [...paths, ...articles, ...profiles, ...custom];
 
   return locales.flatMap((locale) =>
     all.map((path) => ({

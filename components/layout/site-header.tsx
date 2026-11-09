@@ -13,6 +13,8 @@ import { href, l, locales, type Locale } from "@/lib/i18n";
 import { mainNav } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 
+export type ExtraNavItem = { href: string; label: string };
+
 function LanguageSwitcher({ locale }: { locale: Locale }) {
   const pathname = usePathname() ?? `/${locale}`;
   const params = useSearchParams();
@@ -42,13 +44,13 @@ function LanguageSwitcher({ locale }: { locale: Locale }) {
   );
 }
 
-function DesktopNav({ locale }: { locale: Locale }) {
+function DesktopNav({ locale, extraNav }: { locale: Locale; extraNav: ExtraNavItem[] }) {
   const pathname = usePathname() ?? "";
   const copy = t(locale);
   const [openKey, setOpenKey] = useState<string | null>(null);
 
   return (
-    <nav aria-label={copy.mainNav} className="hidden items-center gap-1 xl:flex">
+    <nav aria-label={copy.mainNav} className="hidden max-w-[68%] flex-wrap items-center justify-end gap-1 xl:flex">
       {mainNav.map((item) => {
         const itemHref = href(locale, item.href);
         const active = pathname === itemHref || pathname.startsWith(`${itemHref}/`);
@@ -97,11 +99,25 @@ function DesktopNav({ locale }: { locale: Locale }) {
           </div>
         );
       })}
+      {extraNav.map((item) => {
+        const itemHref = href(locale, item.href);
+        const active = pathname === itemHref;
+        return (
+          <Link
+            key={item.href}
+            href={itemHref}
+            aria-current={active ? "page" : undefined}
+            className={cn("inline-flex min-h-11 items-center px-2 text-sm", active && "font-semibold")}
+          >
+            {item.label}
+          </Link>
+        );
+      })}
     </nav>
   );
 }
 
-function MobileNav({ locale }: { locale: Locale }) {
+function MobileNav({ locale, extraNav }: { locale: Locale; extraNav: ExtraNavItem[] }) {
   const copy = t(locale);
   const [open, setOpen] = useState(false);
 
@@ -141,6 +157,21 @@ function MobileNav({ locale }: { locale: Locale }) {
                 ) : null}
               </div>
             ))}
+            {extraNav.length > 0 ? (
+              <div className="border-t border-line py-2">
+                <p className="pt-2 text-sm text-muted">{copy.extraPages}</p>
+                {extraNav.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={href(locale, item.href)}
+                    className="flex min-h-11 items-center font-semibold"
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
           </nav>
         </Dialog.Content>
       </Dialog.Portal>
@@ -148,7 +179,7 @@ function MobileNav({ locale }: { locale: Locale }) {
   );
 }
 
-export function SiteHeader({ locale }: { locale: Locale }) {
+export function SiteHeader({ locale, extraNav = [] }: { locale: Locale; extraNav?: ExtraNavItem[] }) {
   const copy = t(locale);
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-background/95 backdrop-blur">
@@ -183,8 +214,8 @@ export function SiteHeader({ locale }: { locale: Locale }) {
             <span className="block font-serif text-lg leading-tight">{l(locale, site.shortName)}</span>
           </span>
         </Link>
-        <DesktopNav locale={locale} />
-        <MobileNav locale={locale} />
+        <DesktopNav locale={locale} extraNav={extraNav} />
+        <MobileNav locale={locale} extraNav={extraNav} />
       </div>
     </header>
   );

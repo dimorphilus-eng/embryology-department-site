@@ -10,6 +10,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith("/ru/") || pathname.startsWith("/en/") || pathname === "/ru" || pathname === "/en") {
     return NextResponse.next();
   }
