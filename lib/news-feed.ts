@@ -13,6 +13,7 @@ export type FeedItem = {
   kind: ArticleKind;
   upcoming: boolean;
   sort: number;
+  source: "site" | "telegram";
 };
 
 function titleAndExcerpt(text: string, photoLabel: string) {
@@ -47,6 +48,7 @@ export async function getNewsFeed(locale: Locale): Promise<FeedItem[]> {
     kind: article.kind,
     upcoming: isUpcoming(article.date),
     sort: Date.parse(`${article.date}T12:00:00Z`) || 0,
+    source: "site",
   }));
   const posts = await getTelegramPosts();
   const telegram: FeedItem[] = posts.map((post) => {
@@ -61,6 +63,7 @@ export async function getNewsFeed(locale: Locale): Promise<FeedItem[]> {
       kind: "news" as const,
       upcoming: false,
       sort: Date.parse(post.datetime) || 0,
+      source: "telegram",
     };
   });
   return [...articles, ...telegram].sort((a, b) => b.sort - a.sort);

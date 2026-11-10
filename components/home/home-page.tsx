@@ -3,15 +3,47 @@ import { DevelopmentalSeries } from "@/components/brand/series";
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
 import { t } from "@/content/messages";
-import { getNewsFeed } from "@/lib/news-feed";
+import { getNewsFeed, type FeedItem } from "@/lib/news-feed";
+import { channelUsername } from "@/lib/telegram";
 import { people } from "@/content/people";
 import { directions, projects, publications } from "@/content/research";
 import { audiences, hero, partners, site, stages } from "@/content/site";
 import { formatDate, href, l, type Locale } from "@/lib/i18n";
 
+function FeedList({ locale, items }: { locale: Locale; items: FeedItem[] }) {
+  return (
+    <ul className="mt-6 grid gap-4">
+      {items.map((item) => (
+        <li key={item.key} className="border-t border-line pt-4">
+          <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
+            <time dateTime={item.date}>{formatDate(locale, item.date)}</time>
+            {item.upcoming ? <Badge>{t(locale).upcoming}</Badge> : null}
+          </div>
+          <h3 className="mt-2 font-serif text-2xl leading-tight">
+            <Link href={href(locale, item.path)} className="underline-offset-4 hover:underline">
+              {item.title}
+            </Link>
+          </h3>
+          {item.excerpt ? <p className="mt-2 text-sm leading-relaxed text-muted">{item.excerpt}</p> : null}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export async function HomePage({ locale }: { locale: Locale }) {
   const copy = t(locale);
-  const news = (await getNewsFeed(locale)).slice(0, 3);
+  const feed = await getNewsFeed(locale);
+  const departmentNews = feed.filter((item) => item.source === "site").slice(0, 4);
+  const channelNews = feed.filter((item) => item.source === "telegram").slice(0, 4);
+  const channel = channelUsername();
+  const shortcuts = [
+    { href: "/about", label: copy.nav.about, primary: true },
+    { href: "/students", label: copy.ctaStudy, primary: false },
+    { href: "/education", label: copy.nav.education, primary: false },
+    { href: "/people", label: copy.nav.people, primary: false },
+    { href: "/news", label: copy.nav.news, primary: false },
+  ];
   const latestPublications = [...publications].sort((a, b) => b.year - a.year).slice(0, 4);
   const activeProjects = projects.filter((project) => project.status === "active").length;
   const facts = [
@@ -29,14 +61,29 @@ export async function HomePage({ locale }: { locale: Locale }) {
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-bronze">{l(locale, hero.eyebrow)}</p>
             <h1 className="mt-4 max-w-3xl font-serif text-4xl leading-[1.12] text-balance sm:text-5xl lg:text-6xl">{l(locale, hero.title)}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted">{l(locale, hero.lead)}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href={href(locale, "/research")} className="inline-flex min-h-11 items-center bg-button px-4 font-semibold text-button-foreground">
-                {copy.ctaResearch}
-              </Link>
-              <Link href={href(locale, "/students")} className="inline-flex min-h-11 items-center border border-current px-4 font-semibold">
-                {copy.ctaStudy}
-              </Link>
-            </div>
+            <nav aria-label={copy.shortcutsLabel} className="mt-8 flex flex-wrap gap-2">
+              {shortcuts.map((item) => (
+                <Link
+                  key={item.href}
+                  href={href(locale, item.href)}
+                  className={
+                    item.primary
+                      ? "inline-flex min-h-11 items-center bg-button px-4 text-sm font-semibold text-button-foreground"
+                      : "inline-flex min-h-11 items-center border border-line bg-card px-4 text-sm font-semibold"
+                  }
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <a
+                href={site.telegram}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center border border-pine bg-pine-soft px-4 text-sm font-semibold text-pine"
+              >
+                {copy.homeTelegramTitle}
+              </a>
+            </nav>
           </div>
           <aside className="border border-line bg-pine-deep p-6 text-header-foreground lg:col-span-5" aria-label={l(locale, site.shortName)}>
             <dl className="grid grid-cols-2 gap-6">
@@ -48,6 +95,39 @@ export async function HomePage({ locale }: { locale: Locale }) {
               ))}
             </dl>
           </aside>
+        </Container>
+      </section>
+
+      <section className="border-b border-line" aria-labelledby="latest-title">
+        <Container className="grid gap-12 py-16 lg:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-bronze">{copy.latestEyebrow}</p>
+            <h2 id="latest-title" className="mt-2 font-serif text-3xl">
+              {copy.homeEventsTitle}
+            </h2>
+            <FeedList locale={locale} items={departmentNews} />
+            <Link href={href(locale, "/news")} className="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-pine underline underline-offset-4">
+              {copy.allNews}
+            </Link>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-bronze">{copy.telegramPlace}</p>
+            <h2 className="mt-2 font-serif text-3xl">{copy.homeTelegramTitle}</h2>
+            {channel ? <p className="mt-3 text-sm text-muted">@{channel}</p> : null}
+            {channelNews.length > 0 ? (
+              <FeedList locale={locale} items={channelNews} />
+            ) : (
+              <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">{copy.homeTelegramEmpty}</p>
+            )}
+            <a
+              href={site.telegram}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-pine underline underline-offset-4"
+            >
+              {copy.telegramOpen}
+            </a>
+          </div>
         </Container>
       </section>
 
@@ -83,36 +163,11 @@ export async function HomePage({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="border-b border-line" aria-labelledby="latest-title">
-        <Container className="grid gap-12 py-16 lg:grid-cols-2">
+      <section className="border-b border-line" aria-labelledby="publications-title">
+        <Container className="py-16">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-bronze">{copy.latestEyebrow}</p>
-            <h2 id="latest-title" className="mt-2 font-serif text-3xl">
-              {copy.newsTitle}
-            </h2>
-            <ul className="mt-6 grid gap-4">
-              {news.map((item) => (
-                <li key={item.key} className="border-t border-line pt-4">
-                  <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
-                    <time dateTime={item.date}>{formatDate(locale, item.date)}</time>
-                    {item.upcoming ? <Badge>{copy.upcoming}</Badge> : null}
-                  </div>
-                  <h3 className="mt-2 font-serif text-2xl leading-tight">
-                    <Link href={href(locale, item.path)} className="underline-offset-4 hover:underline">
-                      {item.title}
-                    </Link>
-                  </h3>
-                  {item.excerpt ? <p className="mt-2 text-sm leading-relaxed text-muted">{item.excerpt}</p> : null}
-                </li>
-              ))}
-            </ul>
-            <Link href={href(locale, "/news")} className="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-pine underline underline-offset-4">
-              {copy.allNews}
-            </Link>
-          </div>
-          <div>
-            <h2 className="font-serif text-3xl">{copy.publicationsTitle}</h2>
-            <ol className="mt-6 border-t border-line">
+            <h2 id="publications-title" className="font-serif text-3xl">{copy.publicationsTitle}</h2>
+            <ol className="mt-6 grid gap-x-10 border-t border-line md:grid-cols-2">
               {latestPublications.map((item) => (
                 <li key={item.id} className="border-b border-line py-4">
                   <p className="text-sm text-bronze">{item.year}</p>
