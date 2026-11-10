@@ -1,0 +1,207 @@
+[
+  {
+    "slug": "bachelor-profile",
+    "title": {
+      "ru": "Профиль бакалавриата «Эмбриология»",
+      "en": "Bachelor’s profile in Embryology"
+    },
+    "summary": {
+      "ru": "Учебный план профиля внутри направления «Биология». Образец для замены официальной программой.",
+      "en": "The profile curriculum inside the Biology degree. A sample to be replaced by the official programme."
+    },
+    "lines": {
+      "ru": [
+        "Направление: биология. Срок: 4 года.",
+        "Профиль выбирается после общего биологического ядра.",
+        "Обязательные курсы кафедры: введение в эмбриологию, биология развития, сравнительная эмбриология, методы биологии развития.",
+        "Практикум проходит на учебной коллекции ранних стадий.",
+        "Курсовая работа четвёртого курса выполняется в одной из лабораторий кафедры.",
+        "Летняя практика длится четыре недели и заканчивается коротким отчётом.",
+        "Этот файл — демонстрационный. Перед публикацией сайта замените его утверждённой программой."
+      ],
+      "en": [
+        "Degree: Biology. Length: 4 years.",
+        "The profile is chosen after the shared biological core.",
+        "Required departmental courses: introduction to embryology, developmental biology, comparative embryology, methods.",
+        "The practical uses the teaching collection of early stages.",
+        "Fourth-year coursework is done in one of the departmental laboratories.",
+        "The summer placement lasts four weeks and ends with a short report.",
+        "This file is a sample. Replace it with the approved programme before the site is published."
+      ]
+    }
+  },
+  {
+    "slug": "master-program",
+    "title": {
+      "ru": "Магистратура «Биология развития»",
+      "en": "MSc in Developmental Biology"
+    },
+    "summary": {
+      "ru": "Краткое описание магистерской программы и требований к диссертации.",
+      "en": "A short description of the master’s programme and of the thesis requirements."
+    },
+    "lines": {
+      "ru": [
+        "Срок: 2 года. Язык семинара: русский и английский.",
+        "Отбор: портфолио и собеседование.",
+        "Курсы: молекулярные механизмы развития, органогенез, эволюция развития, исследовательский семинар.",
+        "К концу второго года студент сдаёт диссертацию и делает доклад на кафедре.",
+        "Публикация не является условием допуска к защите в этой демонстрационной программе.",
+        "Замените файл официальным описанием программы."
+      ],
+      "en": [
+        "Length: 2 years. Seminar languages: Russian and English.",
+        "Selection: portfolio and interview.",
+        "Courses: molecular mechanisms of development, organogenesis, evolution of development, research seminar.",
+        "By the end of the second year the student submits a thesis and speaks in the department.",
+        "A publication is not a condition of defence in this sample programme.",
+        "Replace this file with the official programme description."
+      ]
+    }
+  },
+  {
+    "slug": "doctoral-program",
+    "title": {
+      "ru": "Аспирантура по специальности 1.5.23",
+      "en": "Doctoral programme, specialty 1.5.23"
+    },
+    "summary": {
+      "ru": "Памятка поступающему в аспирантуру кафедры.",
+      "en": "A note for applicants to the departmental doctoral programme."
+    },
+    "lines": {
+      "ru": [
+        "Специальность: 1.5.23 «Биология развития, эмбриология».",
+        "К заявке прилагаются план исследования и согласие руководителя.",
+        "Ежегодный семинар обязателен.",
+        "Преподавательская практика согласуется с заместителем по учебной работе.",
+        "Кафедра не обещает срок защиты: он зависит от задачи и от правил университета.",
+        "Файл демонстрационный."
+      ],
+      "en": [
+        "Specialty: 1.5.23, Developmental Biology and Embryology.",
+        "An application includes a research plan and a supervisor’s agreement.",
+        "The annual seminar is required.",
+        "Teaching practice is agreed with the deputy for education.",
+        "The department does not promise a defence date: it depends on the question and on university rules.",
+        "This file is a sample."
+      ]
+    }
+  },
+  {
+    "slug": "syllabus-embryology",
+    "title": {
+      "ru": "Программа курса «Введение в эмбриологию»",
+      "en": "Syllabus: Introduction to Embryology"
+    },
+    "summary": {
+      "ru": "Рабочая программа вводного курса для второго курса бакалавриата.",
+      "en": "The syllabus of the introductory course for second-year undergraduates."
+    },
+    "lines": {
+      "ru": [
+        "Объём: 108 часов. Зачёт с оценкой.",
+        "Темы: гаметогенез, оплодотворение, дробление, бластула, гаструляция, нейруляция, словари стадий.",
+        "Практикум: чтение препаратов и зарисовка ряда.",
+        "Студент должен уметь назвать оси зародыша и отличить описание от интерпретации.",
+        "Литература подбирается из открытых учебников и статей, список обновляется каждый год.",
+        "Образец программы."
+      ],
+      "en": [
+        "Load: 108 hours. Graded pass.",
+        "Topics: gametogenesis, fertilisation, cleavage, blastula, gastrulation, neurulation, stage vocabularies.",
+        "Practical: reading specimens and drawing a series.",
+        "A student should be able to name the embryonic axes and to separate description from interpretation.",
+        "Reading is chosen from open textbooks and papers and is refreshed each year.",
+        "Sample syllabus."
+      ]
+    }
+  },
+  {
+    "slug": "syllabus-development",
+    "title": {
+      "ru": "Программы курсов биологии развития",
+      "en": "Syllabi for developmental biology courses"
+    },
+    "summary": {
+      "ru": "Сводный образец программ основных курсов кафедры.",
+      "en": "A combined sample of the syllabi for the department’s main courses."
+    },
+    "lines": {
+      "ru": [
+        "Биология развития: судьбы клеток, индукция, морфогенетические движения.",
+        "Сравнительная эмбриология: ранние стадии рыб и амфибий.",
+        "Органогенез: сердце, нервная трубка, оболочки.",
+        "Эволюция развития: пределы сравнительного аргумента.",
+        "Молекулярные механизмы читаются только рядом с морфологией.",
+        "Замените этот свод отдельными утверждёнными программами."
+      ],
+      "en": [
+        "Developmental biology: cell fates, induction, morphogenetic movements.",
+        "Comparative embryology: early stages of fishes and amphibians.",
+        "Organogenesis: heart, neural tube, membranes.",
+        "Evolution of development: the limits of a comparative argument.",
+        "Molecular mechanisms are read only beside the morphology.",
+        "Replace this digest with the separate approved syllabi."
+      ]
+    }
+  },
+  {
+    "slug": "syllabus-methods",
+    "title": {
+      "ru": "Программа курса «Методы биологии развития»",
+      "en": "Syllabus: Methods in Developmental Biology"
+    },
+    "summary": {
+      "ru": "Как устроен практикум по наблюдению, коллекции и съёмке.",
+      "en": "How the practical on observation, the collection, and imaging is organised."
+    },
+    "lines": {
+      "ru": [
+        "Объём: 72 часа, лаборатория.",
+        "Студент ведёт журнал: дата, объект, стадия, что видно, чего не видно.",
+        "Съёмка используется там, где она отвечает на уже сформулированный вопрос.",
+        "Курс не содержит инструкций по получению и модификации эмбрионов вне учебной задачи.",
+        "Оценка ставится за точность описания и за честный предел вывода.",
+        "Образец программы."
+      ],
+      "en": [
+        "Load: 72 hours, laboratory.",
+        "The student keeps a notebook: date, specimen, stage, what is visible, what is not.",
+        "Imaging is used where it answers a question already stated.",
+        "The course does not include instructions for obtaining or modifying embryos outside the teaching task.",
+        "The mark is given for precision of description and for an honest limit on the conclusion.",
+        "Sample syllabus."
+      ]
+    }
+  },
+  {
+    "slug": "reading-list",
+    "title": {
+      "ru": "Список чтения кафедры",
+      "en": "Departmental reading list"
+    },
+    "summary": {
+      "ru": "Короткий список типов источников, с которых начинается работа.",
+      "en": "A short list of the kinds of sources with which work begins."
+    },
+    "lines": {
+      "ru": [
+        "Учебник по сравнительной эмбриологии позвоночных — издание по выбору преподавателя.",
+        "Журналы: Development, Developmental Biology, Онтогенез.",
+        "Базы модельных организмов: Xenbase, ZFIN, FlyBase.",
+        "Атлас стадий, принятый для конкретной модели, а не универсальная таблица.",
+        "Собственный журнал наблюдений студента.",
+        "Список демонстрационный и не заменяет программу курса."
+      ],
+      "en": [
+        "A textbook of comparative vertebrate embryology, in the edition chosen by the teacher.",
+        "Journals: Development, Developmental Biology, Russian Journal of Developmental Biology.",
+        "Model-organism databases: Xenbase, ZFIN, FlyBase.",
+        "The staging atlas accepted for the specific model, not a universal table.",
+        "The student’s own observation notebook.",
+        "This list is a sample and does not replace a course syllabus."
+      ]
+    }
+  }
+]
