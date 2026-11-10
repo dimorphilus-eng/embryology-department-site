@@ -37,6 +37,12 @@ export const pageInput = z.object({
   showInNav: z.boolean(),
 });
 
+export const sectionInput = z.object({
+  title: pair(180, false),
+  lead: pair(400, false),
+  body: pair(20_000, false),
+});
+
 export const articleInput = z.object({
   slug: slugSchema,
   date: dateSchema,

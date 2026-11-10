@@ -26,12 +26,23 @@ export type ManagedArticle = {
   updatedAt: string;
 };
 
+export type SectionKey = "about" | "students" | "education" | "people" | "news";
+
+export type ManagedSection = {
+  key: SectionKey;
+  title: Localized;
+  lead: Localized;
+  body: Localized;
+  updatedAt: string;
+};
+
 export type Store = {
   pages: ManagedPage[];
   articles: ManagedArticle[];
+  sections: ManagedSection[];
 };
 
-const empty: Store = { pages: [], articles: [] };
+const empty: Store = { pages: [], articles: [], sections: [] };
 
 function storeFile() {
   return path.join(process.cwd(), "data", "store.json");
@@ -43,6 +54,7 @@ export function getStore(): Store {
     return {
       pages: Array.isArray(parsed.pages) ? parsed.pages : [],
       articles: Array.isArray(parsed.articles) ? parsed.articles : [],
+      sections: Array.isArray(parsed.sections) ? parsed.sections : [],
     };
   } catch {
     return empty;

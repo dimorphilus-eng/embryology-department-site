@@ -19,6 +19,9 @@ export async function AdminShell({ title, children }: { title: string; children:
             <Link href="/admin">Обзор</Link>
           </Button>
           <Button variant="secondary" asChild>
+            <Link href="/admin/sections">Разделы</Link>
+          </Button>
+          <Button variant="secondary" asChild>
             <Link href="/admin/pages">Страницы</Link>
           </Button>
           <Button variant="secondary" asChild>

@@ -4,6 +4,7 @@ import { people } from "@/content/people";
 import { publications } from "@/content/research";
 import { t } from "@/content/messages";
 import { href, l, normalizeSearch, type Locale } from "@/lib/i18n";
+import { siteSections } from "@/lib/sections";
 import { getStore } from "@/lib/store";
 
 export type SearchKind = "person" | "publication" | "course" | "news" | "page";
@@ -79,6 +80,14 @@ export async function searchSite(locale: Locale, query: string): Promise<SearchH
       href: href(locale, `/p/${page.slug}`),
     })),
   ];
+
+  for (const section of getStore().sections) {
+    const meta = siteSections.find((item) => item.key === section.key);
+    if (!meta) continue;
+    const hit = docs.find((item) => item.kind === "page" && item.href === href(locale, meta.path));
+    if (!hit) continue;
+    hit.text = `${hit.text} ${l(locale, section.title)} ${l(locale, section.lead)} ${l(locale, section.body).slice(0, 500)}`;
+  }
 
   return docs
     .filter((doc) => {

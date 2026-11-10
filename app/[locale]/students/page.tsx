@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SectionNote } from "@/components/content/section-note";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Container } from "@/components/layout/container";
 import { InPageNav, PageHeader } from "@/components/layout/page-header";
@@ -7,6 +8,7 @@ import { t } from "@/content/messages";
 import { faq, studentsPage } from "@/content/site";
 import { l, localeParams } from "@/lib/i18n";
 import { resolveLocale, type LocaleParams } from "@/lib/locale";
+import { sectionText } from "@/lib/sections";
 import { pageMetadata } from "@/lib/seo";
 import { faqJsonLd } from "@/lib/schema";
 
@@ -17,17 +19,19 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const locale = await resolveLocale(params);
   const copy = t(locale);
-  return pageMetadata(locale, { title: copy.pages.students, description: copy.studentsLead, path: "/students" });
+  const text = sectionText("students", locale, { title: copy.pages.students, lead: copy.studentsLead });
+  return pageMetadata(locale, { title: text.title, description: text.lead || copy.studentsLead, path: "/students" });
 }
 
 export default async function StudentsPage({ params }: LocaleParams) {
   const locale = await resolveLocale(params);
   const copy = t(locale);
+  const text = sectionText("students", locale, { title: copy.pages.students, lead: copy.studentsLead });
 
   return (
     <>
       <JsonLd data={faqJsonLd(locale, faq)} />
-      <PageHeader locale={locale} path="/students" title={copy.pages.students} lead={copy.studentsLead} />
+      <PageHeader locale={locale} path="/students" title={text.title} lead={text.lead} />
       <InPageNav
         locale={locale}
         items={[
@@ -37,6 +41,7 @@ export default async function StudentsPage({ params }: LocaleParams) {
           { href: "#faq", label: copy.faq },
         ]}
       />
+      <SectionNote body={text.body} />
       <Container className="grid gap-14 py-12">
         <section id="admissions" className="scroll-mt-36">
           <h2 className="font-serif text-3xl">{copy.admissions}</h2>

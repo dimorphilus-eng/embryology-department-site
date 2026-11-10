@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SectionNote } from "@/components/content/section-note";
 import { Container } from "@/components/layout/container";
 import { InPageNav, PageHeader } from "@/components/layout/page-header";
 import { Monogram } from "@/components/people/monogram";
@@ -8,6 +9,7 @@ import { getPerson } from "@/content/people";
 import { history, mission, orgUnits, site } from "@/content/site";
 import { href, l, localeParams } from "@/lib/i18n";
 import { resolveLocale, type LocaleParams } from "@/lib/locale";
+import { sectionText } from "@/lib/sections";
 import { pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -17,18 +19,20 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
   const locale = await resolveLocale(params);
   const copy = t(locale);
-  return pageMetadata(locale, { title: copy.pages.about, description: l(locale, mission.text), path: "/about" });
+  const text = sectionText("about", locale, { title: copy.pages.about, lead: l(locale, mission.text) });
+  return pageMetadata(locale, { title: text.title, description: text.lead || l(locale, mission.text), path: "/about" });
 }
 
 export default async function AboutPage({ params }: LocaleParams) {
   const locale = await resolveLocale(params);
   const copy = t(locale);
+  const text = sectionText("about", locale, { title: copy.pages.about, lead: l(locale, mission.text) });
   const head = getPerson("elena-sokolova");
   if (!head) return null;
 
   return (
     <>
-      <PageHeader locale={locale} path="/about" title={copy.pages.about} lead={l(locale, mission.text)} eyebrow={l(locale, site.institute)} />
+      <PageHeader locale={locale} path="/about" title={text.title} lead={text.lead} eyebrow={l(locale, site.institute)} />
       <InPageNav
         locale={locale}
         items={[
@@ -38,6 +42,7 @@ export default async function AboutPage({ params }: LocaleParams) {
           { href: "#structure", label: copy.aboutStructure },
         ]}
       />
+      <SectionNote body={text.body} />
       <Container className="grid gap-16 py-14">
         <section id="history" className="scroll-mt-36">
           <h2 className="font-serif text-3xl">{copy.aboutHistory}</h2>
