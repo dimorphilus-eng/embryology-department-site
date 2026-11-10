@@ -11,3 +11,5 @@ next-env.d.ts
 data/uploads/*
 !data/uploads/.gitkeep
 data/store.json.*.tmp
+data/telegram.json
+data/telegram.json.*.tmp

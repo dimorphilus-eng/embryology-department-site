@@ -28,7 +28,7 @@ export default async function SearchPage({
   const queryParam = (await searchParams).q;
   const query = Array.isArray(queryParam) ? queryParam[0] ?? "" : queryParam ?? "";
   const trimmed = query.trim();
-  const results = trimmed.length > 1 ? searchSite(locale, trimmed) : [];
+  const results = trimmed.length > 1 ? await searchSite(locale, trimmed) : [];
   const kindLabel: Record<SearchKind, string> = {
     person: copy.kindPerson,
     publication: copy.kindPublication,

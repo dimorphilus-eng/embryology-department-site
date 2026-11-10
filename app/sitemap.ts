@@ -4,6 +4,7 @@ import { people } from "@/content/people";
 import { site } from "@/content/site";
 import { href, locales } from "@/lib/i18n";
 import { getStore } from "@/lib/store";
+import { getTelegramPosts } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +29,13 @@ const paths = [
   "/search",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const articles = getArticles().map((article) => `/news/${article.slug}`);
+  const telegram = (await getTelegramPosts()).map((post) => `/news/tg/${post.id}`);
   const profiles = people.map((person) => `/people/${person.slug}`);
   const custom = getStore().pages.map((page) => `/p/${page.slug}`);
-  const all = [...paths, ...articles, ...profiles, ...custom];
+  const all = [...paths, ...articles, ...telegram, ...profiles, ...custom];
 
   return locales.flatMap((locale) =>
     all.map((path) => ({

@@ -1,4 +1,4 @@
-import { getArticles } from "@/lib/articles";
+import { getNewsFeed } from "@/lib/news-feed";
 import { courses } from "@/content/education";
 import { people } from "@/content/people";
 import { publications } from "@/content/research";
@@ -34,7 +34,7 @@ const pages: { path: string; title: keyof ReturnType<typeof t>["pages"]; text: {
   { path: "/contacts", title: "contacts", text: { ru: "адрес телефон почта карта", en: "address phone email map" } },
 ];
 
-export function searchSite(locale: Locale, query: string): SearchHit[] {
+export async function searchSite(locale: Locale, query: string): Promise<SearchHit[]> {
   const tokens = normalizeSearch(query)
     .split(" ")
     .filter((token) => token.length > 1);
@@ -60,11 +60,11 @@ export function searchSite(locale: Locale, query: string): SearchHit[] {
       text: `${l(locale, course.summary)} ${l(locale, course.semester)}`,
       href: href(locale, "/education/courses"),
     })),
-    ...getArticles().map((article) => ({
+    ...(await getNewsFeed(locale)).map((item) => ({
       kind: "news" as const,
-      title: l(locale, article.title),
-      text: `${l(locale, article.excerpt)} ${l(locale, article.place)}`,
-      href: href(locale, `/news/${article.slug}`),
+      title: item.title,
+      text: `${item.excerpt} ${item.place}`,
+      href: href(locale, item.path),
     })),
     ...pages.map((page) => ({
       kind: "page" as const,

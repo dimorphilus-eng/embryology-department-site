@@ -2,16 +2,16 @@ import Link from "next/link";
 import { DevelopmentalSeries } from "@/components/brand/series";
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
-import { getArticles, isUpcoming } from "@/lib/articles";
 import { t } from "@/content/messages";
+import { getNewsFeed } from "@/lib/news-feed";
 import { people } from "@/content/people";
 import { directions, projects, publications } from "@/content/research";
 import { audiences, hero, partners, site, stages } from "@/content/site";
 import { formatDate, href, l, type Locale } from "@/lib/i18n";
 
-export function HomePage({ locale }: { locale: Locale }) {
+export async function HomePage({ locale }: { locale: Locale }) {
   const copy = t(locale);
-  const news = getArticles().slice(0, 3);
+  const news = (await getNewsFeed(locale)).slice(0, 3);
   const latestPublications = [...publications].sort((a, b) => b.year - a.year).slice(0, 4);
   const activeProjects = projects.filter((project) => project.status === "active").length;
   const facts = [
@@ -91,18 +91,18 @@ export function HomePage({ locale }: { locale: Locale }) {
               {copy.newsTitle}
             </h2>
             <ul className="mt-6 grid gap-4">
-              {news.map((article) => (
-                <li key={article.slug} className="border-t border-line pt-4">
+              {news.map((item) => (
+                <li key={item.key} className="border-t border-line pt-4">
                   <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
-                    <time dateTime={article.date}>{formatDate(locale, article.date)}</time>
-                    {isUpcoming(article.date) ? <Badge>{copy.upcoming}</Badge> : null}
+                    <time dateTime={item.date}>{formatDate(locale, item.date)}</time>
+                    {item.upcoming ? <Badge>{copy.upcoming}</Badge> : null}
                   </div>
                   <h3 className="mt-2 font-serif text-2xl leading-tight">
-                    <Link href={href(locale, `/news/${article.slug}`)} className="underline-offset-4 hover:underline">
-                      {l(locale, article.title)}
+                    <Link href={href(locale, item.path)} className="underline-offset-4 hover:underline">
+                      {item.title}
                     </Link>
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{l(locale, article.excerpt)}</p>
+                  {item.excerpt ? <p className="mt-2 text-sm leading-relaxed text-muted">{item.excerpt}</p> : null}
                 </li>
               ))}
             </ul>

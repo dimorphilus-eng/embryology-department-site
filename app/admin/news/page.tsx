@@ -4,6 +4,7 @@ import { getFileArticles } from "@/lib/articles";
 import { AdminShell } from "@/components/admin/shell";
 import { Button } from "@/components/ui/button";
 import { getStore } from "@/lib/store";
+import { channelUsername } from "@/lib/telegram";
 
 export const metadata: Metadata = {
   title: "Новости",
@@ -18,6 +19,7 @@ const kindLabel = {
 
 export default async function AdminNewsPage() {
   const store = getStore();
+  const channel = channelUsername();
   const managed = [...store.articles].sort((a, b) => b.date.localeCompare(a.date));
   const taken = new Set(managed.map((article) => article.slug));
   const files = getFileArticles()
@@ -31,6 +33,11 @@ export default async function AdminNewsPage() {
           <Link href="/admin/news/new">Новая запись</Link>
         </Button>
       </div>
+      <p className="mb-8 max-w-2xl text-sm leading-relaxed text-muted">
+        {channel
+          ? `Сообщения публичного канала @${channel} попадают в ленту сами, примерно за полминуты, и здесь не редактируются. Канал должен открываться по адресу t.me/s/${channel}.`
+          : "Адрес канала не задан. Укажите его в content/site.ts или в переменной TELEGRAM_CHANNEL."}
+      </p>
       {managed.length === 0 ? <p className="mb-8 text-muted">Своих записей пока нет.</p> : null}
       {managed.length > 0 ? (
         <ul className="mb-10 divide-y divide-line border border-line">

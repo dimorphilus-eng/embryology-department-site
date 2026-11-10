@@ -3,8 +3,8 @@ import { Container } from "@/components/layout/container";
 import { PageHeader } from "@/components/layout/page-header";
 import { NewsBrowser, type NewsCardModel } from "@/components/news/news-browser";
 import { t } from "@/content/messages";
-import { getArticles, isUpcoming } from "@/lib/articles";
-import { formatDate, href, l, localeParams } from "@/lib/i18n";
+import { formatDate, href, localeParams } from "@/lib/i18n";
+import { getNewsFeed } from "@/lib/news-feed";
 import { resolveLocale, type LocaleParams } from "@/lib/locale";
 import { pageMetadata } from "@/lib/seo";
 
@@ -27,15 +27,15 @@ export default async function NewsPage({ params }: LocaleParams) {
     conference: copy.kindConference,
     defense: copy.kindDefense,
   };
-  const items: NewsCardModel[] = getArticles().map((article) => ({
-    href: href(locale, `/news/${article.slug}`),
-    title: l(locale, article.title),
-    excerpt: l(locale, article.excerpt),
-    date: formatDate(locale, article.date),
-    place: l(locale, article.place),
-    kind: article.kind,
-    kindLabel: kindLabel[article.kind],
-    upcoming: isUpcoming(article.date),
+  const items: NewsCardModel[] = (await getNewsFeed(locale)).map((item) => ({
+    href: href(locale, item.path),
+    title: item.title,
+    excerpt: item.excerpt,
+    date: formatDate(locale, item.date),
+    place: item.place,
+    kind: item.kind,
+    kindLabel: kindLabel[item.kind],
+    upcoming: item.upcoming,
   }));
 
   return (
